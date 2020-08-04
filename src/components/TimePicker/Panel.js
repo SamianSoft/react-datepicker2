@@ -1,19 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Header from "./Header";
-import Combobox from "./Combobox";
-import moment from "moment";
+import React from 'react';
+import PropTypes from 'prop-types';
+import momentJalaali from 'moment-jalaali';
+import Header from './Header';
+import Combobox from './Combobox';
 
 function noop() {}
 
 function generateOptions(length, disabledOptions, hideDisabledOptions) {
   const arr = [];
   for (let value = 0; value < length; value++) {
-    if (
-      !disabledOptions ||
-      disabledOptions.indexOf(value) < 0 ||
-      !hideDisabledOptions
-    ) {
+    if (!disabledOptions || disabledOptions.indexOf(value) < 0 || !hideDisabledOptions) {
       arr.push(value);
     }
   }
@@ -27,6 +23,7 @@ class Panel extends React.Component {
     defaultOpenValue: PropTypes.object,
     value: PropTypes.object,
     placeholder: PropTypes.string,
+    name: PropTypes.string,
     format: PropTypes.string,
     disabledHours: PropTypes.func,
     disabledMinutes: PropTypes.func,
@@ -43,10 +40,10 @@ class Panel extends React.Component {
   };
 
   static defaultProps = {
-    prefixCls: "rc-time-picker-panel",
+    prefixCls: 'rc-time-picker-panel',
     onChange: noop,
     onClear: noop,
-    defaultOpenValue: moment()
+    defaultOpenValue: momentJalaali()
   };
 
   constructor(props) {
@@ -57,8 +54,8 @@ class Panel extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    const value = nextProps.value;
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const { value } = nextProps;
     if (value) {
       this.setState({
         value
@@ -66,18 +63,18 @@ class Panel extends React.Component {
     }
   }
 
-  onChange = (newValue) => {
+  onChange = newValue => {
     this.setState({ value: newValue });
     this.props.onChange(newValue);
-  }
+  };
 
   onClear = () => {
     this.props.onClear();
-  }
+  };
 
-  onCurrentSelectPanelChange = (currentSelectPanel) => {
+  onCurrentSelectPanelChange = currentSelectPanel => {
     this.setState({ currentSelectPanel });
-  }
+  };
 
   render() {
     const {
@@ -86,6 +83,7 @@ class Panel extends React.Component {
       prefixCls,
       className,
       placeholder,
+      name,
       disabledHours,
       disabledMinutes,
       disabledSeconds,
@@ -106,21 +104,9 @@ class Panel extends React.Component {
       value ? value.hour() : null,
       value ? value.minute() : null
     );
-    const hourOptions = generateOptions(
-      24,
-      disabledHourOptions,
-      hideDisabledOptions
-    );
-    const minuteOptions = generateOptions(
-      60,
-      disabledMinuteOptions,
-      hideDisabledOptions
-    );
-    const secondOptions = generateOptions(
-      60,
-      disabledSecondOptions,
-      hideDisabledOptions
-    );
+    const hourOptions = generateOptions(24, disabledHourOptions, hideDisabledOptions);
+    const minuteOptions = generateOptions(60, disabledMinuteOptions, hideDisabledOptions);
+    const secondOptions = generateOptions(60, disabledSecondOptions, hideDisabledOptions);
 
     return (
       <div className={`${prefixCls}-inner ${className}`}>
@@ -133,6 +119,7 @@ class Panel extends React.Component {
           onEsc={onEsc}
           format={format}
           placeholder={placeholder}
+          name={name}
           hourOptions={hourOptions}
           minuteOptions={minuteOptions}
           secondOptions={secondOptions}

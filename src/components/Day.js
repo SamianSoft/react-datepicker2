@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { persianNumber } from '../utils/persian';
 
@@ -22,9 +22,11 @@ export default class Day extends Component {
   };
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.selected !== this.props.selected ||
+    return (
+      nextProps.selected !== this.props.selected ||
       nextProps.disabled !== this.props.disabled ||
-      nextProps.isCurrentMonth !== this.props.isCurrentMonth;
+      nextProps.isCurrentMonth !== this.props.isCurrentMonth
+    );
   }
 
   handleClick(event) {
@@ -39,23 +41,35 @@ export default class Day extends Component {
   }
 
   render() {
-    const { day, disabled, selected, isCurrentMonth, onClick, styles,isGregorian, ...rest } = this.props;
+    const {
+      day,
+      disabled,
+      selected,
+      isCurrentMonth,
+      onClick,
+      styles,
+      isGregorian,
+      isToday,
+      colors,
+      ...rest
+    } = this.props;
 
     const className = classnames(styles.dayWrapper, {
       [styles.selected]: selected,
-      [styles.currentMonth]: isCurrentMonth
+      [styles.currentMonth]: isCurrentMonth,
+      [styles.today]: isToday
     });
 
     return (
       <div className={className}>
-        <button
-          type="button"
-          onClick={this.handleClick.bind(this) }
-          disabled={disabled}
-          {...rest}
-        >
-          { isGregorian?day.format('D'):persianNumber(day.format('jD')) }
+        <button type="button" onClick={this.handleClick.bind(this)} disabled={disabled} {...rest}>
+          {isGregorian ? day.format('D') : persianNumber(day.format('jD'))}
         </button>
+        <div className="highLightDot-container" onClick={this.handleClick.bind(this)}>
+          {colors.map((x, i) => (
+            <span key={i} className="highLightDot" style={{ backgroundColor: x }}></span>
+          ))}
+        </div>
       </div>
     );
   }

@@ -1,23 +1,23 @@
-import React from "react";
-import moment from "moment-jalaali";
-import DatePicker from "../../src";
+import React from 'react';
+import momentJalaali from 'moment-jalaali';
+import DatePicker from '../../src/index.dev.js';
 
-import Switch from 'react-switch'
+import Switch from 'react-switch';
 
 const buttonContainerStyle = {
-  marginTop:20
-} 
+  marginTop: 20
+};
 const labelStyle = {
-  float:'left'
-} 
+  float: 'left'
+};
 const switchStyle = {
-  float:'right'
-} 
+  float: 'right'
+};
 
 export default class ReactClass extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: moment(), checked: false };
+    this.state = { value: momentJalaali(), checked: false };
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -30,14 +30,17 @@ export default class ReactClass extends React.Component {
       <React.Fragment>
         <div>
           <DatePicker
+            timePicker={false}
             isGregorian={this.state.checked}
-            onChange={value => this.setState({ value })}
+            onChange={value => {
+              this.setState({ value });
+            }}
             value={this.state.value}
           />
         </div>
         <div style={buttonContainerStyle}>
           <label htmlFor="material-switch">
-            <span style={labelStyle}>isGregorian:{this.state.checked?'true':'false'}</span>
+            <span style={labelStyle}>isGregorian:{this.state.checked ? 'true' : 'false'}</span>
             <div style={switchStyle}>
               <Switch
                 checked={this.state.checked}

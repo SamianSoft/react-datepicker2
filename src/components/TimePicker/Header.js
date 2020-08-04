@@ -1,13 +1,14 @@
 import React from 'react';
-import moment from 'moment';
-import PropTypes from "prop-types";
+import momentJalaali from 'moment-jalaali';
+import PropTypes from 'prop-types';
 
 class Header extends React.Component {
- static propTypes = {
+  static propTypes = {
     format: PropTypes.string,
     prefixCls: PropTypes.string,
     disabledDate: PropTypes.func,
     placeholder: PropTypes.string,
+    name: PropTypes.string,
     clearText: PropTypes.string,
     value: PropTypes.object,
     hourOptions: PropTypes.array,
@@ -21,48 +22,60 @@ class Header extends React.Component {
     onEsc: PropTypes.func,
     allowEmpty: PropTypes.bool,
     defaultOpenValue: PropTypes.object,
-    currentSelectPanel: PropTypes.string,
-  }; 
+    currentSelectPanel: PropTypes.string
+  };
 
   constructor(props) {
     super(props);
     const { value, format } = this.props;
     this.state = {
-      str: value && value.format(format) || '',
-      invalid: false,
+      str: (value && value.format(format)) || '',
+      invalid: false
     };
+    this.onClear = this.onClear.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { value, format } = nextProps;
     this.setState({
-      str: value && value.format(format) || '',
-      invalid: false,
+      str: (value && value.format(format)) || '',
+      invalid: false
     });
   }
 
   onInputChange(event) {
     const str = event.target.value;
     this.setState({
-      str,
+      str
     });
     const {
-      format, hourOptions, minuteOptions, secondOptions,
-      disabledHours, disabledMinutes,
-      disabledSeconds, onChange, allowEmpty,
+      format,
+      hourOptions,
+      minuteOptions,
+      secondOptions,
+      disabledHours,
+      disabledMinutes,
+      disabledSeconds,
+      onChange,
+      allowEmpty
     } = this.props;
 
     if (str) {
       const originalValue = this.props.value;
       const value = this.getProtoValue().clone();
-      const parsed = moment(str, format, true);
+      const parsed = momentJalaali(str, format, true);
       if (!parsed.isValid()) {
         this.setState({
-          invalid: true,
+          invalid: true
         });
         return;
       }
-      value.hour(parsed.hour()).minute(parsed.minute()).second(parsed.second());
+      value
+        .hour(parsed.hour())
+        .minute(parsed.minute())
+        .second(parsed.second());
 
       // if time value not allowed, response warning.
       if (
@@ -71,7 +84,7 @@ class Header extends React.Component {
         secondOptions.indexOf(value.second()) < 0
       ) {
         this.setState({
-          invalid: true,
+          invalid: true
         });
         return;
       }
@@ -86,7 +99,7 @@ class Header extends React.Component {
         (disabledSecondOptions && disabledSecondOptions.indexOf(value.second()) >= 0)
       ) {
         this.setState({
-          invalid: true,
+          invalid: true
         });
         return;
       }
@@ -111,13 +124,13 @@ class Header extends React.Component {
       onChange(null);
     } else {
       this.setState({
-        invalid: true,
+        invalid: true
       });
       return;
     }
 
     this.setState({
-      invalid: false,
+      invalid: false
     });
   }
 
@@ -137,12 +150,14 @@ class Header extends React.Component {
     if (!allowEmpty) {
       return null;
     }
-    return (<a
-      className={`${prefixCls}-clear-btn`}
-      role="button"
-      title={this.props.clearText}
-      onMouseDown={this.onClear}
-    />);
+    return (
+      <a
+        className={`${prefixCls}-clear-btn`}
+        role="button"
+        title={this.props.clearText}
+        onMouseDown={this.onClear}
+      />
+    );
   }
 
   getProtoValue() {
@@ -150,17 +165,22 @@ class Header extends React.Component {
   }
 
   getInput() {
-    const { prefixCls, placeholder } = this.props;
+    const { prefixCls, placeholder, name } = this.props;
     const { invalid, str } = this.state;
     const invalidClass = invalid ? `${prefixCls}-input-invalid` : '';
-    return (<input
-      className={`${prefixCls}-input  ${invalidClass}`}
-      ref="input"
-      onKeyDown={this.onKeyDown}
-      value={str}
-      placeholder={placeholder}
-      onChange={this.onInputChange}
-    />);
+    return (
+      <input
+        className={`${prefixCls}-input  ${invalidClass}`}
+        ref={inst => {
+          this.input = inst;
+        }}
+        onKeyDown={this.onKeyDown}
+        value={str}
+        placeholder={placeholder}
+        name={name}
+        onChange={this.onInputChange}
+      />
+    );
   }
 
   render() {

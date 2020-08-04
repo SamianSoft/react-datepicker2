@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from "prop-types";
-import moment from 'moment-jalaali';
+import PropTypes from 'prop-types';
+import momentJalaali from 'moment-jalaali';
 import classnames from 'classnames';
 import MonthsViewHeading from './MonthsViewHeading';
-import { persianNumber } from '../utils/persian';
-import { leftArrow, rightArrow } from '../utils/assets';
 
 // List of months
 const monthsJalaali = [
@@ -68,48 +66,45 @@ export default class MonthSelector extends Component {
   handleClick(key) {
     const { setMonth, setCalendarMode } = this.context;
     const { isGregorian } = this.props;
-    const monthYearFormat= isGregorian ? 'M-YYYY' : 'jM-jYYYY';
-    setMonth(moment(key, monthYearFormat));
+    const monthYearFormat = isGregorian ? 'M-YYYY' : 'jM-jYYYY';
+    setMonth(momentJalaali(key, monthYearFormat));
     setCalendarMode('days');
   }
 
   render() {
     const { year } = this.state;
-    const { selectedMonth, styles,isGregorian } = this.props;
-              const yearFormat= isGregorian ? 'YYYY' : 'jYYYY';
-    const monthYearFormat= isGregorian ? 'M-YYYY' : 'jM-jYYYY';
-    const months=isGregorian ? monthsGregorian : monthsJalaali;
+    const { selectedMonth, styles, isGregorian } = this.props;
+    const yearFormat = isGregorian ? 'YYYY' : 'jYYYY';
+    const monthYearFormat = isGregorian ? 'M-YYYY' : 'jM-jYYYY';
+    const months = isGregorian ? monthsGregorian : monthsJalaali;
 
     return (
       <div className="month-selector">
         <MonthsViewHeading
-          isGregorian={ isGregorian }
+          isGregorian={isGregorian}
           styles={styles}
           year={year}
-          onNextYear={this.nextYear.bind(this) }
-          onPrevYear={this.prevYear.bind(this) }
+          onNextYear={this.nextYear.bind(this)}
+          onPrevYear={this.prevYear.bind(this)}
         />
         <div className={styles.monthsList}>
-          {
-            months.map((name, key) => {
-              const buttonFingerprint = (key + 1) + '-' + year.format(yearFormat);
-              const selectedMonthFingerprint = selectedMonth.format(monthYearFormat);
-              const isCurrent = selectedMonthFingerprint === buttonFingerprint;
+          {months.map((name, key) => {
+            const buttonFingerprint = `${key + 1}-${year.format(yearFormat)}`;
+            const selectedMonthFingerprint = selectedMonth.format(monthYearFormat);
+            const isCurrent = selectedMonthFingerprint === buttonFingerprint;
 
-              const className = classnames(styles.monthWrapper, {
-                [styles.selected]: isCurrent
-              });
+            const className = classnames(styles.monthWrapper, {
+              [styles.selected]: isCurrent
+            });
 
-              return (
-                <div key={key} className={className}>
-                  <button onClick={this.handleClick.bind(this, buttonFingerprint)}>
-                    {name}
-                  </button>
-                </div>
-              );
-            })
-          }
+            return (
+              <div key={key} className={className}>
+                <button onClick={this.handleClick.bind(this, buttonFingerprint)}>{name}</button>
+              </div>
+            );
+          })}
         </div>
-      </div>);
+      </div>
+    );
   }
 }

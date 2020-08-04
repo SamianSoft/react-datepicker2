@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import { persianNumber } from '../utils/persian';
 import { leftArrow, rightArrow } from '../utils/assets';
 
@@ -29,22 +29,47 @@ export default class Heading extends Component {
     return (
       <div className={styles.heading}>
         <button className={styles.title} onClick={this.handleMonthClick.bind(this)}>
-          {this.props.isGregorian? month.locale('en').format('MMMM YYYY'):persianNumber(month.locale('fa').format('jMMMM jYYYY')) }
+          {this.props.isGregorian
+            ? month.locale('en').format('MMMM YYYY')
+            : persianNumber(month.locale('fa').format('jMMMM jYYYY'))}
         </button>
-        <button
-          type="button"
-          title="ماه قبل"
-          className={styles.prev}
-          onClick={prevMonth}
-          dangerouslySetInnerHTML={rightArrow}
-        />
-        <button
-          type="button"
-          title="ماه بعد"
-          className={styles.next}
-          onClick={nextMonth}
-          dangerouslySetInnerHTML={leftArrow}
-        />
+        {this.props.timePicker}
+        {!this.props.isGregorian && (
+          <React.Fragment>
+            <button
+              type="button"
+              title="ماه قبل"
+              className={styles.prev}
+              onClick={prevMonth}
+              dangerouslySetInnerHTML={rightArrow}
+            />
+            <button
+              type="button"
+              title="ماه بعد"
+              className={styles.next}
+              onClick={nextMonth}
+              dangerouslySetInnerHTML={leftArrow}
+            />
+          </React.Fragment>
+        )}
+        {this.props.isGregorian && (
+          <React.Fragment>
+            <button
+              type="button"
+              title="previous month"
+              className={styles.next}
+              onClick={prevMonth}
+              dangerouslySetInnerHTML={leftArrow}
+            />
+            <button
+              type="button"
+              title="next month"
+              className={styles.prev}
+              onClick={nextMonth}
+              dangerouslySetInnerHTML={rightArrow}
+            />
+          </React.Fragment>
+        )}
       </div>
     );
   }

@@ -17,7 +17,7 @@ export function getDaysOfMonth(month, isGregorian) {
   current.subtract((current.day() + dayOffset) % 7, 'days');
 
   // Set end to the last day of week in the next month
-  end.add(6 - (end.day() + dayOffset) % 7, 'days');
+  end.add(6 - ((end.day() + dayOffset) % 7), 'days');
 
   while (current.isBefore(end)) {
     days.push(current.clone());
@@ -25,4 +25,20 @@ export function getDaysOfMonth(month, isGregorian) {
   }
 
   return days;
+}
+
+export function addZero(val) {
+  val = Number(val);
+  if (val < 10) return `0${val}`;
+  return val;
+}
+
+export function checkToday(compare) {
+  const today = new Date();
+  const todayString =
+    String(today.getFullYear()) +
+    addZero(String(today.getMonth() + 1)) +
+    addZero(String(today.getDate()));
+
+  return compare === todayString;
 }
