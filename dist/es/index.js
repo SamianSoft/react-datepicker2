@@ -193,8 +193,22 @@ function latinToPersian(string) {
   return result;
 }
 
+function toEnglishDigits(str) {
+  if (!str) return str;
+  var regex1 = /[\u0660-\u0669]/g;
+  var regex2 = /[\u06f0-\u06f9]/g;
+  return str.replace(regex1, function (c) {
+    return c.charCodeAt(0) - 0x0660;
+  }).replace(regex2, function (c) {
+    return c.charCodeAt(0) - 0x06f0;
+  });
+}
+
 function persianNumber(input) {
   return latinToPersian(prepareNumber(input));
+}
+function toLatin(input) {
+  return toEnglishDigits(prepareNumber(input));
 }
 
 var leftArrow = {
@@ -480,7 +494,7 @@ var MonthSelector = /*#__PURE__*/function (_Component) {
       }), /*#__PURE__*/React.createElement("div", {
         className: styles.monthsList
       }, months.map(function (name, key) {
-        var buttonFingerprint = "".concat(key + 1, "-").concat(year.format(yearFormat));
+        var buttonFingerprint = "".concat(key + 1, "-").concat(toLatin(year.format(yearFormat)));
         var selectedMonthFingerprint = selectedMonth.format(monthYearFormat);
         var isCurrent = selectedMonthFingerprint === buttonFingerprint;
         var className = classnames(styles.monthWrapper, defineProperty({}, styles.selected, isCurrent));
@@ -616,7 +630,7 @@ var YearSelector = /*#__PURE__*/function (_Component) {
         ref: this.yearsContainerRef,
         className: styles.yearsList
       }, years.map(function (yearItem, key) {
-        var buttonFingerprint = "".concat(month.format(monthFormat), "-").concat(years[key]);
+        var buttonFingerprint = "".concat(toLatin(month.format(monthFormat)), "-").concat(years[key]);
         var isCurrent = Number(year.format(yearFormat)) === years[key];
         var isCurrentYearPosition = Number(year.format(yearFormat)) === years[key];
         var currentYearClass = classnames(styles.yearWrapper, defineProperty({}, styles.selected, isCurrent));
