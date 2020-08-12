@@ -4,6 +4,7 @@ import momentJalaali from 'moment-jalaali';
 import classnames from 'classnames';
 import range from 'lodash.range';
 import MonthsViewHeading from './MonthsViewHeading';
+import { toLatin } from '../utils/persian';
 
 // List of months
 const yearsJalaali = range(momentJalaali(new Date()).jYear() + 100, 1300);
@@ -21,17 +22,17 @@ export default class YearSelector extends Component {
     styles: PropTypes.object,
     selectedYear: PropTypes.object.isRequired,
     selectedMonth: PropTypes.object.isRequired,
-    isGregorian: PropTypes.bool
+    isGregorian: PropTypes.bool,
   };
 
   static contextTypes = {
     setCalendarMode: PropTypes.func.isRequired,
-    setMonth: PropTypes.func.isRequired
+    setMonth: PropTypes.func.isRequired,
   };
 
   state = {
     year: this.props.selectedYear,
-    month: this.props.selectedMonth
+    month: this.props.selectedMonth,
   };
 
   getOffsetTop = element => {
@@ -48,7 +49,7 @@ export default class YearSelector extends Component {
     const marginTop = 160;
     this.yearsContainerRef.current.scrollTo({
       top: this.getOffsetTop(this.currentYearPositionRef.current) - marginTop,
-      behavior: 'smooth' // optional
+      behavior: 'smooth', // optional
     });
   };
 
@@ -58,13 +59,13 @@ export default class YearSelector extends Component {
 
   nextYear() {
     this.setState({
-      year: this.state.year.clone().add(1, 'year')
+      year: this.state.year.clone().add(1, 'year'),
     });
   }
 
   prevYear() {
     this.setState({
-      year: this.state.year.clone().subtract(1, 'year')
+      year: this.state.year.clone().subtract(1, 'year'),
     });
   }
 
@@ -94,13 +95,13 @@ export default class YearSelector extends Component {
         />
         <div ref={this.yearsContainerRef} className={styles.yearsList}>
           {years.map((yearItem, key) => {
-            const buttonFingerprint = `${month.format(monthFormat)}-${years[key]}`;
+            const buttonFingerprint = `${toLatin(month.format(monthFormat))}-${years[key]}`;
             const isCurrent = Number(year.format(yearFormat)) === years[key];
 
             const isCurrentYearPosition = Number(year.format(yearFormat)) === years[key];
 
             const currentYearClass = classnames(styles.yearWrapper, {
-              [styles.selected]: isCurrent
+              [styles.selected]: isCurrent,
             });
 
             return (

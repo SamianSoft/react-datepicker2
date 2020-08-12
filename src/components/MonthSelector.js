@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import momentJalaali from 'moment-jalaali';
 import classnames from 'classnames';
 import MonthsViewHeading from './MonthsViewHeading';
+import { toLatin } from '../utils/persian';
 
 // List of months
 const monthsJalaali = [
@@ -17,7 +18,7 @@ const monthsJalaali = [
   'آذر',
   'دی',
   'بهمن',
-  'اسفند'
+  'اسفند',
 ];
 
 const monthsGregorian = [
@@ -32,7 +33,7 @@ const monthsGregorian = [
   'September',
   'October',
   'November',
-  'December'
+  'December',
 ];
 
 export default class MonthSelector extends Component {
@@ -45,22 +46,22 @@ export default class MonthSelector extends Component {
 
   static contextTypes = {
     setCalendarMode: PropTypes.func.isRequired,
-    setMonth: PropTypes.func.isRequired
+    setMonth: PropTypes.func.isRequired,
   };
 
   state = {
-    year: this.props.selectedMonth
+    year: this.props.selectedMonth,
   };
 
   nextYear() {
     this.setState({
-      year: this.state.year.clone().add(1, 'year')
+      year: this.state.year.clone().add(1, 'year'),
     });
   }
 
   prevYear() {
     this.setState({
-      year: this.state.year.clone().subtract(1, 'year')
+      year: this.state.year.clone().subtract(1, 'year'),
     });
   }
 
@@ -91,12 +92,12 @@ export default class MonthSelector extends Component {
         />
         <div className={styles.monthsList}>
           {months.map((name, key) => {
-            const buttonFingerprint = `${key + 1}-${year.format(yearFormat)}`;
+            const buttonFingerprint = `${key + 1}-${toLatin(year.format(yearFormat))}`;
             const selectedMonthFingerprint = selectedMonth.format(monthYearFormat);
             const isCurrent = selectedMonthFingerprint === buttonFingerprint;
 
             const className = classnames(styles.monthWrapper, {
-              [styles.selected]: isCurrent
+              [styles.selected]: isCurrent,
             });
 
             return (
