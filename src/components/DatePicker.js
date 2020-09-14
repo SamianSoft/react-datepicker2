@@ -42,6 +42,7 @@ export default class DatePicker extends Component {
     persianDigits: PropTypes.bool,
     setTodayOnBlur: PropTypes.bool,
     disableYearSelector: PropTypes.bool,
+    onKeyDown: PropTypes.func,
   };
 
   static defaultProps = {
@@ -279,6 +280,7 @@ export default class DatePicker extends Component {
           onBlur={this.hanldeBlur.bind(this)}
           onChange={this.handleInputChange.bind(this)}
           onClick={this.handleInputClick.bind(this)}
+          onKeyDown={this.props.onKeyDown}
           value={
             isGregorian || !this.props.persianDigits ? inputValue : this.toPersianDigits(inputValue)
           }
