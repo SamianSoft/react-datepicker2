@@ -2739,8 +2739,9 @@
           });
         }
 
-        this.setOpen(false);
         this.setMomentValue(momentValue);
+        this.setOpen(false);
+        this.input.focus();
       }
     }, {
       key: "handleInputChange",
@@ -2777,6 +2778,8 @@
     }, {
       key: "hanldeBlur",
       value: function hanldeBlur(event) {
+        var _this3 = this;
+
         if (this.props.onChange) {
           var _this$state5 = this.state,
               inputFormat = _this$state5.inputFormat,
@@ -2791,6 +2794,10 @@
           } else if (this.props.setTodayOnBlur) {
             this.props.onChange(momentJalaali());
           }
+
+          setTimeout(function () {
+            _this3.setOpen(false);
+          }, 300);
         }
       }
     }, {
@@ -2817,12 +2824,12 @@
     }, {
       key: "render",
       value: function render() {
-        var _this3 = this;
+        var _this4 = this;
 
         var isOpen = this.state.isOpen;
         return /*#__PURE__*/React__default.createElement(TetherComponent, {
           ref: function ref(tether) {
-            return _this3.tether = tether;
+            return _this4.tether = tether;
           },
           attachment: this.props.tetherAttachment ? this.props.tetherAttachment : 'top center',
           constraints: [{
@@ -2831,17 +2838,17 @@
           }],
           offset: "-10px -10px",
           onResize: function onResize() {
-            return _this3.tether && _this3.tether.position();
+            return _this4.tether && _this4.tether.position();
           }
           /* renderTarget: This is what the item will be tethered to, make sure to attach the ref */
           ,
           renderTarget: function renderTarget(ref) {
-            return _this3.renderInput(ref);
+            return _this4.renderInput(ref);
           }
           /* renderElement: If present, this item will be tethered to the the component returned by renderTarget */
           ,
           renderElement: function renderElement(ref) {
-            return isOpen && _this3.renderCalendar(ref);
+            return isOpen && _this4.renderCalendar(ref);
           }
         });
       }

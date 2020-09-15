@@ -211,8 +211,10 @@ export default class DatePicker extends Component {
         second: oldValue.seconds()
       });
     }
-    this.setOpen(false);
+
     this.setMomentValue(momentValue);
+    this.setOpen(false);
+    this.input.focus()
   }
 
   handleInputChange(event) {
@@ -250,6 +252,9 @@ export default class DatePicker extends Component {
       } else if (this.props.setTodayOnBlur) {
         this.props.onChange(momentJalaali());
       }
+      setTimeout(() => {
+        this.setOpen(false);
+      }, 300);
     }
   }
 
