@@ -2557,7 +2557,7 @@
           onBlur: _this.hanldeBlur.bind(assertThisInitialized(_this)),
           onChange: _this.handleInputChange.bind(assertThisInitialized(_this)),
           onClick: _this.handleInputClick.bind(assertThisInitialized(_this)),
-          onKeyDown: _this.props.onKeyDown,
+          onKeyDown: _this.hanldeKeyDown.bind(assertThisInitialized(_this)),
           value: isGregorian || !_this.props.persianDigits ? inputValue : _this.toPersianDigits(inputValue),
           readOnly: _this.props.inputReadOnly === true,
           disabled: _this.props.disabled
@@ -2778,8 +2778,6 @@
     }, {
       key: "hanldeBlur",
       value: function hanldeBlur(event) {
-        var _this3 = this;
-
         if (this.props.onChange) {
           var _this$state5 = this.state,
               inputFormat = _this$state5.inputFormat,
@@ -2794,11 +2792,16 @@
           } else if (this.props.setTodayOnBlur) {
             this.props.onChange(momentJalaali());
           }
-
-          setTimeout(function () {
-            _this3.setOpen(false);
-          }, 300);
         }
+      }
+    }, {
+      key: "hanldeKeyDown",
+      value: function hanldeKeyDown(event) {
+        if (event.key === 'Enter' || event.key === '\n' || event.key === 'Tab') {
+          this.setOpen(false);
+        }
+
+        this.props.onKeyDown(event);
       }
     }, {
       key: "handleInputClick",
@@ -2824,12 +2827,12 @@
     }, {
       key: "render",
       value: function render() {
-        var _this4 = this;
+        var _this3 = this;
 
         var isOpen = this.state.isOpen;
         return /*#__PURE__*/React__default.createElement(TetherComponent, {
           ref: function ref(tether) {
-            return _this4.tether = tether;
+            return _this3.tether = tether;
           },
           attachment: this.props.tetherAttachment ? this.props.tetherAttachment : 'top center',
           constraints: [{
@@ -2838,17 +2841,17 @@
           }],
           offset: "-10px -10px",
           onResize: function onResize() {
-            return _this4.tether && _this4.tether.position();
+            return _this3.tether && _this3.tether.position();
           }
           /* renderTarget: This is what the item will be tethered to, make sure to attach the ref */
           ,
           renderTarget: function renderTarget(ref) {
-            return _this4.renderInput(ref);
+            return _this3.renderInput(ref);
           }
           /* renderElement: If present, this item will be tethered to the the component returned by renderTarget */
           ,
           renderElement: function renderElement(ref) {
-            return isOpen && _this4.renderCalendar(ref);
+            return isOpen && _this3.renderCalendar(ref);
           }
         });
       }
