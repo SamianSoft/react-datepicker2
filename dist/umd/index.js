@@ -2533,10 +2533,6 @@
         });
       });
 
-      defineProperty(assertThisInitialized(_this), "handleFocus", function () {
-        _this.setOpen(true);
-      });
-
       defineProperty(assertThisInitialized(_this), "renderInput", function (ref) {
         var _this$state = _this.state,
             isOpen = _this$state.isOpen,
@@ -2552,8 +2548,8 @@
           type: "text",
           ref: function ref(inst) {
             _this.input = inst;
-          },
-          onFocus: _this.handleFocus.bind(assertThisInitialized(_this)),
+          } // onFocus={this.handleFocus.bind(this)}
+          ,
           onBlur: _this.hanldeBlur.bind(assertThisInitialized(_this)),
           onChange: _this.handleInputChange.bind(assertThisInitialized(_this)),
           onClick: _this.handleInputClick.bind(assertThisInitialized(_this)),
@@ -2697,7 +2693,10 @@
           momentValue: momentValue,
           inputValue: inputValue
         });
-      }
+      } // handleFocus = () => {
+      //   this.setOpen(true);
+      // };
+
     }, {
       key: "handleClickOutsideCalendar",
       value: function handleClickOutsideCalendar() {
