@@ -1,6 +1,6 @@
 {
   "name": "react-datepicker2-samian",
-  "version": "3.3.17",
+  "version": "3.3.18",
   "description": "react datepicker component. (include persian jalaali calendar)",
   "main": "dist/umd/index.js",
   "types": "dist/types/index.d.ts",
