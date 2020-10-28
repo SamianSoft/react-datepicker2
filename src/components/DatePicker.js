@@ -98,13 +98,11 @@ export default class DatePicker extends Component {
   }
 
   setOpen = isOpen => {
-    console.log('1111: ', isOpen);
     this.setState({ isOpen });
 
     if (this.props.onOpen) {
       this.props.onOpen(isOpen);
     }
-    console.log('2222: ', isOpen);
   };
 
   UNSAFE_componentWillMount() {
