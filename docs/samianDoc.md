@@ -4,5 +4,6 @@ https://stackoverflow.com/questions/7244321/how-do-i-update-a-github-forked-repo
 
 # Update package version and npm package manager
 
-npm version X.x.y
-npm update
+### `npm version X.x.y`
+
+### `npm publish`
