@@ -1012,7 +1012,18 @@
         var _this$state = _this.state,
             month = _this$state.month,
             isGregorian = _this$state.isGregorian;
-        var yearMonthFormat = isGregorian ? 'YYYYMM' : 'jYYYYjMM'; // Because there's no `m1.isSame(m2, 'jMonth')`
+        var yearMonthFormat = isGregorian ? 'YYYYMM' : 'jYYYYjMM';
+
+        if (!selectedDay) {
+          _this.setState({
+            year: _this.props.defaultYear || _this.props.selectedDay || momentJalaali(_this.props.min),
+            month: _this.props.defaultMonth || _this.props.selectedDay || momentJalaali(_this.props.min),
+            selectedDay: null
+          });
+
+          return;
+        } // Because there's no `m1.isSame(m2, 'jMonth')`
+
 
         if (selectedDay.format(yearMonthFormat) !== month.format(yearMonthFormat)) {
           _this.setState({
@@ -2616,7 +2627,8 @@
         inputFormat: _this.props.inputFormat || _this.getInputFormat(true, _this.props.timePicker),
         isGregorian: _this.props.isGregorian,
         timePicker: _this.props.timePicker,
-        timePickerComponent: _this.props.timePicker ? MyTimePicker : undefined
+        timePickerComponent: _this.props.timePicker ? MyTimePicker : undefined,
+        setTodayOnBlur: _this.props.setTodayOnBlur
       };
       return _this;
     }
@@ -2651,7 +2663,8 @@
           if (nextProps.value === null) {
             this.setState({
               input: '',
-              inputValue: ''
+              inputValue: '',
+              momentValue: null
             });
           } else if (typeof nextProps.value === 'undefined' && typeof this.props.value !== 'undefined' || typeof nextProps.value !== 'undefined' && !nextProps.value.isSame(this.props.value)) {
             this.setMomentValue(nextProps.value);
@@ -2673,6 +2686,12 @@
           this.setState({
             timePicker: nextProps.timePicker,
             timePickerComponent: this.props.timePicker ? MyTimePicker : undefined
+          });
+        }
+
+        if ('setTodayOnBlur' in nextProps && nextProps.setTodayOnBlur !== this.props.setTodayOnBlur) {
+          this.setState({
+            setTodayOnBlur: nextProps.setTodayOnBlur
           });
         }
       }
@@ -2778,6 +2797,7 @@
       key: "hanldeBlur",
       value: function hanldeBlur(event) {
         if (this.props.onChange) {
+          if (!event.target.value && this.state.setTodayOnBlur === false) return;
           var _this$state5 = this.state,
               inputFormat = _this$state5.inputFormat,
               inputJalaaliFormat = _this$state5.inputJalaaliFormat,
@@ -2786,9 +2806,9 @@
           var currentInputFormat = isGregorian ? inputFormat : inputJalaaliFormat;
           var momentValue = momentJalaali(inputValue, currentInputFormat);
 
-          if (momentValue.isValid()) {
+          if (event.target.value && momentValue.isValid()) {
             this.props.onChange(this.state.momentValue);
-          } else if (this.props.setTodayOnBlur) {
+          } else if (this.state.setTodayOnBlur === true) {
             this.props.onChange(momentJalaali());
           }
         }
@@ -2820,7 +2840,8 @@
 
         this.setState({
           input: '',
-          inputValue: ''
+          inputValue: '',
+          momentValue: null
         });
       }
     }, {
