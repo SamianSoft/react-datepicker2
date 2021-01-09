@@ -1,4 +1,4 @@
-declare module 'react-datepicker2' {
+declare module 'react-datepicker2-samian' {
   import { Component, DOMAttributes, CSSProperties, ChangeEventHandler } from 'react';
   import { Moment } from 'moment-jalaali';
 
